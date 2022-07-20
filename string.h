@@ -90,26 +90,6 @@ void *memmove(void *dst, const void *src, size_t len)
 	return dst;
 }
 
-/* must be exported, as it's used by libgcc on ARM */
-__attribute__((weak,unused,section(".text.nolibc_memcpy")))
-void *memcpy(void *dst, const void *src, size_t len)
-{
-	return _nolibc_memcpy_up(dst, src, len);
-}
-
-/* might be ignored by the compiler without -ffreestanding, then found as
- * missing.
- */
-__attribute__((weak,unused,section(".text.nolibc_memset")))
-void *memset(void *dst, int b, size_t len)
-{
-	char *p = dst;
-
-	while (len--)
-		*(p++) = b;
-	return dst;
-}
-
 static __attribute__((unused))
 char *strchr(const char *s, int c)
 {
