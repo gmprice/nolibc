@@ -79,6 +79,24 @@ int atoi(const char *s)
 	return atol(s);
 }
 
+
+// helper for a local env variable
+static __attribute__((unused))
+char *getenv_static(const char *name, char **env)
+{
+	int idx, i;
+
+	if (env) {
+		for (idx = 0; env[idx]; idx++) {
+			for (i = 0; name[i] && name[i] == env[idx][i];)
+				i++;
+			if (!name[i] && env[idx][i] == '=')
+				return &env[idx][i+1];
+		}
+	}
+	return NULL;
+}
+
 /* Tries to find the environment variable named <name> in the environment array
  * pointed to by global variable "environ" which must be declared as a char **,
  * and must be terminated by a NULL (it is recommended to set this variable to
@@ -89,17 +107,7 @@ static __attribute__((unused))
 char *getenv(const char *name)
 {
 	extern char **environ;
-	int idx, i;
-
-	if (environ) {
-		for (idx = 0; environ[idx]; idx++) {
-			for (i = 0; name[i] && name[i] == environ[idx][i];)
-				i++;
-			if (!name[i] && environ[idx][i] == '=')
-				return &environ[idx][i+1];
-		}
-	}
-	return NULL;
+  return getenv_static(name, environ);
 }
 
 /* Converts the unsigned long integer <in> to its hex representation into

@@ -208,4 +208,43 @@ char *strrchr(const char *s, int c)
 	return (char *)ret;
 }
 
+static int __attribute__((used)) strcmp(const char* s1, const char* s2)
+{
+  char s1c = *s1++;
+  char s2c = *s2++;
+  while (s1c != '\0' && s2c != '\0')
+  {
+    if (s1c == s2c)
+    {
+      s1c = *s1++;
+      s2c = *s2++;
+      continue;
+    }
+    return s1c - s2c;
+  }
+  return s1c - s2c;
+}
+
+static int __attribute__((used)) strncmp(const char* s1, const char* s2, size_t n)
+{
+  if (n == 0)
+    return 0;
+  char s1c = *s1++;
+  char s2c = *s2++;
+  while (s1c != '\0' && s2c != '\0' && n != 0)
+  {
+    if (s1c == s2c)
+    {
+      s1c = *s1++;
+      s2c = *s2++;
+      n--;
+      continue;
+    }
+    return s1c - s2c;
+  }
+  if (n == 0)
+    return 0;
+  return s1c - s2c;
+}
+
 #endif /* _NOLIBC_STRING_H */
